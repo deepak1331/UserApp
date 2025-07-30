@@ -1,6 +1,7 @@
 package com.learn.UserApp.entity;
 
 import com.learn.UserApp.model.Rating;
+import com.learn.UserApp.model.dto.RatingDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,5 +39,7 @@ public class User {
 
     @Transient
     private List<Rating> ratings;
+
+    //private List<RatingDto> rating;
 
 }

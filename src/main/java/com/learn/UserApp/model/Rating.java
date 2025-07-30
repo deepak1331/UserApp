@@ -1,5 +1,6 @@
 package com.learn.UserApp.model;
 
+import com.learn.UserApp.model.dto.HotelDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,6 @@ public class Rating {
     private String feedback;
     private Date createdOn;
     private Date updatedOn;
-    private Hotel hotel;
+    //private Hotel hotel;
+    private HotelDto hotel;
 }
