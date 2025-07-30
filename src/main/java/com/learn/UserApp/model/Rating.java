@@ -1,7 +1,14 @@
 package com.learn.UserApp.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Rating {
 
     private String ratingId;
@@ -12,4 +19,5 @@ public class Rating {
     private String feedback;
     private Date createdOn;
     private Date updatedOn;
+    private Hotel hotel;
 }
