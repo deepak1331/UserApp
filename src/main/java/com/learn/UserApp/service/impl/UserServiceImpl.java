@@ -5,26 +5,22 @@ import com.learn.UserApp.exception.ResourceNotFoundException;
 import com.learn.UserApp.model.Hotel;
 import com.learn.UserApp.model.Rating;
 import com.learn.UserApp.model.dto.HotelDto;
-import com.learn.UserApp.model.dto.RatingDto;
 import com.learn.UserApp.repo.UserRespository;
 import com.learn.UserApp.service.UserService;
 import com.learn.UserApp.service.external.HotelService;
 import com.learn.UserApp.service.external.RatingService;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static com.learn.UserApp.constant.AppConstants.*;
+import static com.learn.UserApp.constant.AppConstants.NOT_FOUND;
+import static com.learn.UserApp.constant.AppConstants.RATING_BY_USER;
 
 @Log4j2
 @Service
