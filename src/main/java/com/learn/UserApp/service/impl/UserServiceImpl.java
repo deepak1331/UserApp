@@ -52,6 +52,37 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         log.info("Fetching All Users");
         List<User> userList = repository.findAll();
+        if (!userList.isEmpty()) {
+            Map<String,User> userMap = userList.stream().collect(Collectors.toMap(User::getId, user -> user));
+
+            //Using RestTemplate
+            Rating[] ratings = restTemplate.getForObject(RATING_SERVICE, Rating[].class);
+            log.info("Rating Service Response Size: {}", ratings != null ? ratings.length : 0);
+
+            Hotel[] hotels = restTemplate.getForObject(HOTEL_SERVICE, Hotel[].class);
+            log.info("Hotel Service Response Size : {}", hotels != null ? hotels.length : 0);
+            Map<String, Hotel> hotelMap = Arrays.stream(hotels)
+                    .collect(Collectors.toMap(Hotel::getId, hotel -> hotel));
+
+            List<Rating> ratingList = Arrays.stream(ratings).map(rating -> {
+                if (hotelMap.containsKey(rating.getHotelId())) {
+                    rating.setHotel(mapper.map(hotelMap.get(rating.getHotelId()), HotelDto.class));
+                }
+                return rating;
+            }).toList();
+
+            //Map all rating into a map, with userID as key, and List of ratings as value.
+            Map<String, List<Rating>> ratingMap = ratingList.stream()
+                    .collect(Collectors.groupingBy(Rating::getUserId));
+            // log.debug("Ratings after adding Hotel Info : {}", ratingList);
+
+            userList =  userList.stream().map(user ->{
+                if(ratingMap.containsKey(user.getId())){
+                    user.setRatings(ratingMap.get(user.getId()));
+                }
+                return user;
+            }).toList();
+        }
         return userList;
     }
 
