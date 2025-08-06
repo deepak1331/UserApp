@@ -12,6 +12,9 @@ public interface UserService {
     //Get All Users
     List<User> getAllUsers();
 
+
+    List<User> getAllUsersWithRating();
+
     //Get User by ID
     User getUserById(String userId);
 }

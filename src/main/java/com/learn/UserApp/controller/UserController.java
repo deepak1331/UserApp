@@ -3,9 +3,8 @@ package com.learn.UserApp.controller;
 import com.learn.UserApp.entity.User;
 import com.learn.UserApp.service.UserService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +24,26 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.saveUser(user));
     }
 
+    //@Retry Usage
+    short retryCount = 0;
+    @RequestMapping(method = RequestMethod.GET)
+    @Retry(name="ratingHotelRetry", fallbackMethod = "ratingHotelRetryFB")
+    public ResponseEntity<List<User>> getUsers() {
+        log.info("Retry Method invoked");
+        log.info("Retry Count : {}", ++retryCount);
+
+        return ResponseEntity.ok(service.getAllUsersWithRating());
+    }
+
+
+    public ResponseEntity<List<User>> ratingHotelRetryFB(Exception e) {
+        log.info("ratingHotelRetryFB method invoked as fallback for GetAllUsers. " +
+                "Kindly note it will not give the nested results for users " +
+                "(ratings and hotels will not be shown along with user details)");
+        return ResponseEntity.ok(service.getAllUsers());
+    }
+
+    //@CircuitBreaker Usage
     @RequestMapping(path = "/{userId}", method = RequestMethod.GET)
     @CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallback")
     public ResponseEntity<User> getUser(@PathVariable String userId) {
@@ -38,13 +57,7 @@ public class UserController {
                 .id("0000-0000-0000-0000")
                 .about("This is a dummy response, since rating service is down")
                 .email("dummy@gmail.com").build();
+
         return ResponseEntity.ok(user);
-
-    }
-
-
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.ok(service.getAllUsers());
     }
 }

@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAllUsersWithRating() {
         log.info("Fetching All Users");
         List<User> userList = repository.findAll();
         if (!userList.isEmpty()) {
@@ -84,6 +84,11 @@ public class UserServiceImpl implements UserService {
             }).toList();
         }
         return userList;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return repository.findAll();
     }
 
     @Override
