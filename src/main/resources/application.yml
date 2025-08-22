@@ -51,6 +51,7 @@ resilience4j:
         automatic-transition-from-open-to-half-open-enabled: true
         sliding-window-size: 2
         sliding-window-type: COUNT_BASED
+        #sliding-window-type: TIME_BASED
 
   retry:
     instances:

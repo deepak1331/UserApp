@@ -10,7 +10,6 @@ import java.util.List;
 @FeignClient(value = "RatingApp")
 public interface RatingService {
 
-
     @GetMapping("/rating/user/{userId}")
     List<Rating> getRatingByUserId(@PathVariable String userId);
 }

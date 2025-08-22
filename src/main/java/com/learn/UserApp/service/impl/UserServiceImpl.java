@@ -53,7 +53,8 @@ public class UserServiceImpl implements UserService {
         log.info("Fetching All Users");
         List<User> userList = repository.findAll();
         if (!userList.isEmpty()) {
-            Map<String,User> userMap = userList.stream().collect(Collectors.toMap(User::getId, user -> user));
+//            Map<String,User> userMap = userList.stream()
+//                    .collect(Collectors.toMap(User::getId, user -> user));
 
             //Using RestTemplate
             Rating[] ratings = restTemplate.getForObject(RATING_SERVICE, Rating[].class);
@@ -76,8 +77,8 @@ public class UserServiceImpl implements UserService {
                     .collect(Collectors.groupingBy(Rating::getUserId));
             // log.debug("Ratings after adding Hotel Info : {}", ratingList);
 
-            userList =  userList.stream().map(user ->{
-                if(ratingMap.containsKey(user.getId())){
+            userList = userList.stream().map(user -> {
+                if (ratingMap.containsKey(user.getId())) {
                     user.setRatings(ratingMap.get(user.getId()));
                 }
                 return user;
